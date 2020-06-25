@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:thingtranslator/home_page.dart';
+import 'package:thingtranslator/take_picture/camera_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,14 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: HomePage(),
     );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
