@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:thingtranslator/screens/showModel.dart';
 import 'package:thingtranslator/take_picture/camera_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _initializeControllerFuture;
   bool isCameraReady = false;
   bool showCapturedPhoto = false;
+  TextEditingController value = TextEditingController();
 
   @override
   void initState() {
@@ -105,6 +107,29 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
+final buttonCheckScore = Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: SizedBox(
+        width: 180,
+        height: 50,
+        child: RaisedButton(
+          padding: EdgeInsets.all(4.0),
+          textColor: Colors.white,
+          color: Color(0xff0072BB),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ShowModel(imageUrl: value.text,),
+              ),
+            );
+          },
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          child: new Text("Analyze", style: TextStyle(fontSize: 16)),
+        ),
+      ),
+    );
 
     final body = SingleChildScrollView(
       child: Column(
@@ -115,7 +140,7 @@ class _HomePageState extends State<HomePage> {
           Center(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text("To use this app, you need to take a picture or import picture from gallery to analyze!",
+              child: Text("To use this app, you need to take a picture or import picture from gallery or input link image to analyze!",
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
@@ -135,6 +160,21 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(
             height: 20,
+          ),  
+          Padding(
+            padding: EdgeInsets.all(10.0),
+            child: TextField(
+                controller: value,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Please input image URL',
+                    hintStyle: TextStyle(color: Colors.grey),
+                  ),
+              ),
+          ),
+              buttonCheckScore,   
+          SizedBox(
+            height: 20,
           ),
           Padding(
             padding: EdgeInsets.all(5.0),
@@ -145,10 +185,8 @@ class _HomePageState extends State<HomePage> {
                   image: DecorationImage(
                       fit: BoxFit.fill, image: FileImage(_image)),
               ),
-            ) : null
-            ,
+            ) : null,
           )
-
         ],
       ),
     );
