@@ -10,6 +10,7 @@ class MyApp extends StatelessWidget {
       title: 'Things Translator',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: "OperatorMono",
         primaryColor: Colors.deepPurple[500],
         accentColor: Colors.yellow[500]
       ),

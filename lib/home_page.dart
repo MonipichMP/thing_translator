@@ -69,7 +69,10 @@ class _HomePageState extends State<HomePage> {
 
     final appBar = AppBar(
       centerTitle: true,
-      title: Text("Thing Translator"),
+      title: Text("Thing Translator", 
+      style: TextStyle(
+        fontFamily: "OperatorMono"
+      ),),
     );
     
     final buttonTakeCamera = CustomButton(title: "Take Camera", onPressed: () {
