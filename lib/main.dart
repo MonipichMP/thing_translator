@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:thingtranslator/home_page.dart';
-import 'package:thingtranslator/take_picture/camera_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,9 +7,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Things Translator',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.deepPurple[500],
+        accentColor: Colors.yellow[500]
       ),
       home: HomePage(),
     );

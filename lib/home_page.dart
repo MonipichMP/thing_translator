@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -7,6 +8,7 @@ import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:thingtranslator/screens/showModel.dart';
 import 'package:thingtranslator/take_picture/camera_screen.dart';
+import 'package:thingtranslator/widgets_recycle/button.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,6 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   File _image;
+  String _imageBase64;
   CameraController _controller;
   Future<void> _initializeControllerFuture;
   bool isCameraReady = false;
@@ -49,8 +52,13 @@ class _HomePageState extends State<HomePage> {
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    List<int> imageBytes = image.readAsBytesSync();
+    String imageBase64 = base64Encode(imageBytes);
+    print("image: $imageBase64");
+    // Uint8List decoded = base64Decode(imageBase64);
     setState(
           () {
+        _imageBase64 = imageBase64;
         _image = image;
       },
     );
@@ -63,73 +71,29 @@ class _HomePageState extends State<HomePage> {
       centerTitle: true,
       title: Text("Thing Translator"),
     );
-
-    final buttonTakeCamera = Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: SizedBox(
-        width: 180,
-        height: 50,
-        child: RaisedButton(
-          padding: EdgeInsets.all(4.0),
-          textColor: Colors.white,
-          color: Color(0xff0072BB),
-          onPressed: () {
-            Navigator.push(
+    
+    final buttonTakeCamera = CustomButton(title: "Take Camera", onPressed: () {
+        Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => CameraScreen(),
               ),
             );
-          },
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-          child: new Text("Take Camera", style: TextStyle(fontSize: 16)),
-        ),
-      ),
-    );
+    });
 
-    final buttonImport = Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: SizedBox(
-        width: 180,
-        height: 50,
-        child: RaisedButton(
-          padding: EdgeInsets.all(4.0),
-          textColor: Colors.white,
-          color: Color(0xff0072BB),
-          onPressed: () {
-            getImage();
-          },
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-          child: new Text("Import From Gallery", style: TextStyle(fontSize: 16)),
-        ),
-      ),
-    );
+    final buttonImport = CustomButton(title: "Import From Gallery", onPressed: () {
+         getImage();
+    });
 
-final buttonCheckScore = Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: SizedBox(
-        width: 180,
-        height: 50,
-        child: RaisedButton(
-          padding: EdgeInsets.all(4.0),
-          textColor: Colors.white,
-          color: Color(0xff0072BB),
-          onPressed: () {
+    final buttonCheckScore = CustomButton(title: "Analyze", onPressed: () {
+         // value.text
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ShowModel(imageUrl: value.text,),
+                builder: (context) => ShowModel(imageInput: _imageBase64, imagePath: _image,),
               ),
             );
-          },
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-          child: new Text("Analyze", style: TextStyle(fontSize: 16)),
-        ),
-      ),
-    );
+    });
 
     final body = SingleChildScrollView(
       child: Column(
@@ -183,7 +147,8 @@ final buttonCheckScore = Padding(
               height: 450,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      fit: BoxFit.fill, image: FileImage(_image)),
+                      fit: BoxFit.contain, 
+                      image: FileImage(_image)),
               ),
             ) : null,
           )
