@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:thingtranslator/home_page.dart';
+import 'package:thingtranslator/screens/base_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,9 +12,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "OperatorMono",
         primaryColor: Colors.deepPurple[500],
-        accentColor: Colors.yellow[500]
+        accentColor: Colors.amberAccent
       ),
-      home: HomePage(),
+      home: BaseScreen(),
     );
   }
 }

@@ -2,15 +2,17 @@ import 'dart:io';
 
 import "package:flutter/material.dart";
 import 'package:thingtranslator/apis/label_api.dart';
-import 'package:thingtranslator/home_page.dart';
 import 'package:thingtranslator/models/label_annotation.dart';
+import 'package:thingtranslator/screens/base_screen.dart';
 import 'package:thingtranslator/widgets_recycle/button.dart';
 
 class ShowModel extends StatefulWidget {
   final String imageInput;
   final File imagePath;
+  final String imageUrl;
 
-  const ShowModel({Key key, this.imageInput, this.imagePath}) : super(key: key);
+  const ShowModel({Key key, this.imageInput, this.imagePath, this.imageUrl})
+      : super(key: key);
 
   @override
   _ShowModelState createState() => _ShowModelState();
@@ -22,9 +24,9 @@ class _ShowModelState extends State<ShowModel> {
 // for image url
   Future<List<LabelAnnotation>> getLabelList() async {
     return LabelAnnotationAPI()
-        .getLabelListUsingImageUrl(widget.imageInput)
+        .getLabelListUsingImageUrl(widget.imageUrl)
         .then((value) {
-      print("data: ${value.data}");
+      print("url data: ${value.data}");
       return labelList = value.data;
     });
   }
@@ -34,7 +36,8 @@ class _ShowModelState extends State<ShowModel> {
     return LabelAnnotationAPI()
         .getLabelListUsingImageBase64(widget.imageInput)
         .then((value) {
-      print("data: ${value.data}");
+      print("path data: ${value.data}");
+      print("imag64: ${widget.imageInput}");
       return labelList = value.data;
     });
   }
@@ -42,7 +45,7 @@ class _ShowModelState extends State<ShowModel> {
   @override
   void initState() {
     super.initState();
-    // getLabelList();
+    getLabelList();
     getLabelListFromImage64();
   }
 
@@ -54,11 +57,30 @@ class _ShowModelState extends State<ShowModel> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(),
+              builder: (context) => BaseScreen(),
             ),
           );
         });
-        
+
+    final previewImagePath = Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.4,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            fit: BoxFit.contain,
+            image: FileImage(
+                widget.imagePath == null ? File("") : widget.imagePath)),
+      ),
+    );
+    final previewContainerUrl = Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.4,
+        child: Image.network(widget.imageUrl == null ? "" : widget.imageUrl),
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -66,7 +88,9 @@ class _ShowModelState extends State<ShowModel> {
       ),
       body: SingleChildScrollView(
         child: FutureBuilder<List<LabelAnnotation>>(
-          future: getLabelListFromImage64(),
+          future: widget.imageUrl == null
+              ? getLabelListFromImage64()
+              : getLabelList(),
           builder: (context, AsyncSnapshot<List<LabelAnnotation>> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data.length > 0) {
@@ -79,15 +103,9 @@ class _ShowModelState extends State<ShowModel> {
                     child: Center(
                       child: Column(
                         children: <Widget>[
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.4,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.contain,
-                                  image: FileImage(widget.imagePath)),
-                            ),
-                          ),
+                          widget.imageUrl == null
+                              ? previewImagePath
+                              : previewContainerUrl,
                           SizedBox(height: 14),
                           Text("Name: ${snapshot.data[0].description}",
                               style: TextStyle(
@@ -114,24 +132,48 @@ class _ShowModelState extends State<ShowModel> {
                   ),
                 );
               } else {
-                return Center(
-                  child: AlertDialog(
-                    title: Text("Error"),
-                    content: SingleChildScrollView(
-                      child: ListBody(
-                        children: <Widget>[Text("Error on Getting Data")],
-                      ),
-                    ),
-                    actions: <Widget>[
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text("Try Again"))
-                    ],
-                  ),
-                );
+                return Center(child: Text("No data"));
               }
+            } else if (snapshot.hasError) {
+              return Column(
+                children: <Widget>[
+                  Center(
+                    child: AlertDialog(
+                      title: Text("Error"),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            Text("Error on ${snapshot.error}")
+                          ],
+                        ),
+                      ),
+                      actions: <Widget>[
+                        Center(
+                          child: CustomButton(
+                            title: "Try Again",
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                        Center(
+                          child: CustomButton(
+                            title: "Back Home",
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BaseScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
             } else {
               return Container(
                 width: MediaQuery.of(context).size.width,

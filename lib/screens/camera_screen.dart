@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:thingtranslator/screens/preview_picture.dart';
@@ -70,9 +71,6 @@ class _CameraScreenState extends State {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Back to Home'),
-      ),
       body: Container(
         child: SafeArea(
           child: Column(
@@ -86,9 +84,9 @@ class _CameraScreenState extends State {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  _cameraTogglesRowWidget(),
+                  Spacer(),
                   _captureControlRowWidget(context),
-                  Spacer()
+                  _cameraTogglesRowWidget(),
                 ],
               ),
               SizedBox(height: 20.0)
@@ -128,8 +126,7 @@ class _CameraScreenState extends State {
           mainAxisSize: MainAxisSize.max,
           children: [
             FloatingActionButton(
-                child: Icon(Icons.camera),
-                backgroundColor: Colors.blueGrey,
+                child: SvgPicture.asset("assets/images/cam.svg"),
                 onPressed: () {
                   _onCapturePressed(context);
                 })
@@ -150,7 +147,7 @@ class _CameraScreenState extends State {
 
     return Expanded(
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.center,
         child: FlatButton.icon(
             onPressed: _onSwitchCamera,
             icon: Icon(_getCameraLensIcon(lensDirection)),
