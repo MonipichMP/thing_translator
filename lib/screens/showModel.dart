@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import "package:flutter/material.dart";
 import 'package:thingtranslator/apis/label_api.dart';
+import 'package:thingtranslator/home_page.dart';
 import 'package:thingtranslator/models/label_annotation.dart';
+import 'package:thingtranslator/widgets_recycle/button.dart';
 
 class ShowModel extends StatefulWidget {
   final String imageInput;
@@ -42,97 +42,123 @@ class _ShowModelState extends State<ShowModel> {
   @override
   void initState() {
     super.initState();
-    getLabelList();
+    // getLabelList();
     getLabelListFromImage64();
   }
 
   @override
   Widget build(BuildContext context) {
+    final buttonBackToHome = CustomButton(
+        title: "Back Home Screen",
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
+        });
+        
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Result Analysis'),
-        backgroundColor: Colors.blueGrey,
       ),
       body: SingleChildScrollView(
-          child: FutureBuilder<List<LabelAnnotation>>(
-        future: getLabelListFromImage64(),
-        builder: (context, AsyncSnapshot<List<LabelAnnotation>> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              var score0 = snapshot.data[0].score * 100;
-              var score1 = snapshot.data[1].score * 100;
-              var score2 = snapshot.data[2].score * 100;
-              // Uint8List decodedImage = base64Decode(widget.imageInput);
-              return Padding(
-                padding: EdgeInsets.all(8.0),
-                child: SafeArea(
+        child: FutureBuilder<List<LabelAnnotation>>(
+          future: getLabelListFromImage64(),
+          builder: (context, AsyncSnapshot<List<LabelAnnotation>> snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data.length > 0) {
+                var score0 = snapshot.data[0].score * 100;
+                var score1 = snapshot.data[1].score * 100;
+                var score2 = snapshot.data[2].score * 100;
+                return Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: SafeArea(
                     child: Center(
-                  child: Column(
-                    children: <Widget>[
-                      // Image.network(
-                      //   decodedImage,
-                      //   width: 350,
-                      //   height: 450,
-                      // ),
-                      Container(
-                        width: 350,
-                        height: 450,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              fit: BoxFit.contain, 
-                              image: FileImage(widget.imagePath)),
-                        ),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * 0.4,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.contain,
+                                  image: FileImage(widget.imagePath)),
+                            ),
+                          ),
+                          SizedBox(height: 14),
+                          Text("Name: ${snapshot.data[0].description}",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          Text("Confident: ${score0.toInt()} %",
+                              style: TextStyle(fontSize: 16)),
+                          SizedBox(height: 14),
+                          Text("Name: ${snapshot.data[1].description}",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          Text("Confident: ${score1.toInt()} %",
+                              style: TextStyle(fontSize: 16)),
+                          SizedBox(height: 14),
+                          Text("Name: ${snapshot.data[2].description}",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          Text("Confident: ${score2.toInt()} %",
+                              style: TextStyle(fontSize: 16)),
+                          SizedBox(height: 30),
+                          buttonBackToHome,
+                        ],
                       ),
-                      SizedBox(height: 16),
-                      Text("Name: ${snapshot.data[0].description}",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                      Text("Confident: ${score0.toInt()} %",
-                          style: TextStyle(fontSize: 16)),
-                      SizedBox(height: 16),
-                      Text("Name: ${snapshot.data[1].description}",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                      Text("Confident: ${score1.toInt()} %",
-                          style: TextStyle(fontSize: 16)),
-                      SizedBox(height: 16),
-                      Text("Name: ${snapshot.data[2].description}",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                      Text("Confident: ${score2.toInt()} %",
-                          style: TextStyle(fontSize: 16)),
+                    ),
+                  ),
+                );
+              } else {
+                return Center(
+                  child: AlertDialog(
+                    title: Text("Error"),
+                    content: SingleChildScrollView(
+                      child: ListBody(
+                        children: <Widget>[Text("Error on Getting Data")],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      FlatButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("Try Again"))
                     ],
                   ),
-                )),
-              );
+                );
+              }
             } else {
-              print("no data get");
-            }
-          } else {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                  child: Dialog(
-                child: Container(
-                  width: 100,
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  height: AppBar().preferredSize.height,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      CircularProgressIndicator(),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Text("loading")
-                    ],
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Dialog(
+                  child: Container(
+                    width: 150,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    height: 70,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Text("loading")
+                      ],
+                    ),
                   ),
                 ),
-              )),
-            );
-          }
-        },
-      )),
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 }
