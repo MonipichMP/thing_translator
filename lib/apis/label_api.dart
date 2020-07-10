@@ -62,7 +62,7 @@ class LabelAnnotationAPI {
     if (response.statusCode == 200) {
       print("getting label annotation success!");
       var data = jsonDecode(response.body);
-      print(data['responses']);
+      // print(data['responses']);
       LabelAnnotationList labelAnnotationList =
           LabelAnnotationList.fromJson(data['responses'][0]);
       return labelAnnotationList;
