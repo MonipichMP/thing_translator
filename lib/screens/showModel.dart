@@ -8,6 +8,7 @@ import 'package:thingtranslator/screens/base_screen.dart';
 import 'package:thingtranslator/widgets_recycle/alert_error.dart';
 import 'package:thingtranslator/widgets_recycle/button.dart';
 import 'package:thingtranslator/widgets_recycle/display_result.dart';
+import 'package:thingtranslator/widgets_recycle/speech.dart';
 
 class ShowModel extends StatefulWidget {
   final String imageInput;
@@ -157,12 +158,20 @@ class _ShowModelState extends State<ShowModel> {
                           ),
                           builder: (context, AsyncSnapshot<String> snap) {
                             if (snap.hasData) {
-                              return DisplayResult(
-                                nameText: "ឈ្មោះ:",
-                                text: snap.data,
-                                score: score0,
-                                nameScore: "កម្រិតប៉ាន់ស្មាន:",
-                                svgPicture: "assets/images/flagcam.svg",
+                              return Column(
+                                children: <Widget>[
+                                  DisplayResult(
+                                    nameText: "ឈ្មោះ:",
+                                    text: snap.data,
+                                    score: score0,
+                                    nameScore: "កម្រិតប៉ាន់ស្មាន:",
+                                    svgPicture: "assets/images/flagcam.svg",
+                                  ),
+                                  SizedBox(height: 30),
+                                  SpeechContainer(
+                                    textForSpeech: snapshot.data[0].description,
+                                  ),
+                                ],
                               );
                             } else if (snap.hasError) {
                               return DisplayResult(

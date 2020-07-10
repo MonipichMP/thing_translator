@@ -28,6 +28,7 @@ dependencies:
   path_provider: ^1.6.11
   path: ^1.6.4
   flutter_svg: ^0.17.4
+  flutter_text_to_speech: ^3.0.7
 
 dev_dependencies:
   flutter_test:
