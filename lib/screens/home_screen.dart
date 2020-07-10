@@ -43,7 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future getImageForPreview() async {
-    var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery) ;
+    final _picker = ImagePicker();
+    var image = await _picker.getImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+    );
+    var imageFile = File(image.path);
     setState(
       () {
         _image = imageFile;
