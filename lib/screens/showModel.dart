@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import "package:flutter/material.dart";
+import 'package:provider/provider.dart';
 import 'package:thingtranslator/apis/label_api.dart';
 import 'package:thingtranslator/apis/translate_api.dart';
 import 'package:thingtranslator/models/label_annotation.dart';
+import 'package:thingtranslator/providers/Label_list_provider.dart';
+import 'package:thingtranslator/providers/translation_provider.dart';
 import 'package:thingtranslator/screens/base_screen.dart';
 import 'package:thingtranslator/widgets_recycle/alert_error.dart';
 import 'package:thingtranslator/widgets_recycle/button.dart';
@@ -58,13 +61,43 @@ class _ShowModelState extends State<ShowModel> {
   @override
   void initState() {
     super.initState();
-    getLabelList();
-    getLabelListFromImage64();
-    // getTranslateData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // Provider.of<LabelListProvider>(context)
+    //     .setLabelListUsingImageUrl(widget.imageUrl);
+    // Provider.of<LabelListProvider>(context)
+    //     .setLabelListFromImage64(widget.imageInput);
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    // var translateWord = Provider.of<TranslationProvider>(context);
+
+    final loadingWidget = Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      child: Container(
+        width: 150,
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        height: 70,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CircularProgressIndicator(),
+            SizedBox(
+              width: 16,
+            ),
+            Text("Calculating...")
+          ],
+        ),
+      ),
+    );
+
     final buttonBackToHome = CustomButton(
         title: "Back Home Screen",
         onPressed: () {
@@ -77,11 +110,11 @@ class _ShowModelState extends State<ShowModel> {
         });
 
     final previewImagePath = Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.4,
+      width: MediaQuery.of(context).size.width - 20,
+      height: 300,
       decoration: BoxDecoration(
         image: DecorationImage(
-          fit: BoxFit.contain,
+          fit: BoxFit.cover,
           image:
               FileImage(widget.imagePath == null ? File("") : widget.imagePath),
         ),
@@ -90,131 +123,167 @@ class _ShowModelState extends State<ShowModel> {
     final previewContainerUrl = Padding(
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.4,
-        child: Image.network(widget.imageUrl == null ? "" : widget.imageUrl),
-      ),
-    );
-
-    final loadingWidget = Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      child: Dialog(
-        child: Container(
-          width: 150,
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          height: 70,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              CircularProgressIndicator(),
-              SizedBox(
-                width: 16,
-              ),
-              Text("loading")
-            ],
-          ),
+        width: MediaQuery.of(context).size.width - 20,
+        height: 300,
+        child: Image.network(
+          widget.imageUrl == null ? "" : widget.imageUrl,
+          fit: BoxFit.cover,
         ),
       ),
     );
+
+    // final body = Padding(
+    //   padding: EdgeInsets.all(8.0),
+    //   child: widget.imageUrl == null
+    //       ? Column(
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //           crossAxisAlignment: CrossAxisAlignment.center,
+    //           children: <Widget>[
+    //             previewImagePath,
+    //             SizedBox(height: 24),
+    //             DisplayResult(
+    //               nameText: "Name:",
+    //               text: widget.imageInput.description,
+    //               nameScore: "Confident score:",
+    //               score: widget.imageInput.score * 100,
+    //               svgPicture: "assets/images/flaguk.svg",
+    //             ),
+    //             SizedBox(height: 14),
+    //             DisplayResult(
+    //               nameText: "ឈ្មោះ:",
+    //               text: translateWord.getTranslateWord,
+    //               score: widget.imageInput.score * 100,
+    //               nameScore: "កម្រិតប៉ាន់ស្មាន:",
+    //               svgPicture: "assets/images/flagcam.svg",
+    //             ),
+    //             SizedBox(height: 30),
+    //             SpeechContainer(
+    //               textForSpeech: widget.imageInput.description,
+    //             ),
+    //           ],
+    //         )
+    //       : Column(
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //           crossAxisAlignment: CrossAxisAlignment.center,
+    //           children: <Widget>[
+    //             previewContainerUrl,
+    //             SizedBox(height: 24),
+    //             DisplayResult(
+    //               nameText: "Name:",
+    //               text: widget.imageUrl.description,
+    //               nameScore: "Confident score:",
+    //               score: widget.imageUrl.score * 100,
+    //               svgPicture: "assets/images/flaguk.svg",
+    //             ),
+    //             SizedBox(height: 14),
+    //             DisplayResult(
+    //               nameText: "ឈ្មោះ:",
+    //               text: translateWord.getTranslateWord,
+    //               score: widget.imageUrl.score * 100,
+    //               nameScore: "កម្រិតប៉ាន់ស្មាន:",
+    //               svgPicture: "assets/images/flagcam.svg",
+    //             ),
+    //             SizedBox(height: 30),
+    //             SpeechContainer(
+    //               textForSpeech: widget.imageUrl.description,
+    //             ),
+    //           ],
+    //         ),
+    // );
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text('Result Analysis'),
       ),
-      body: SingleChildScrollView(
-        child: FutureBuilder<List<LabelAnnotation>>(
-          future: widget.imageUrl == null
-              ? getLabelListFromImage64()
-              : getLabelList(),
-          builder: (context, AsyncSnapshot<List<LabelAnnotation>> snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data.length > 0) {
-                var score0 = snapshot.data[0].score * 100;
-                return Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: SafeArea(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        widget.imageUrl == null
-                            ? previewImagePath
-                            : previewContainerUrl,
-                        SizedBox(height: 24),
-                        DisplayResult(
-                          nameText: "Name:",
-                          text: snapshot.data[0].description,
-                          nameScore: "Confident score:",
-                          score: score0,
-                          svgPicture: "assets/images/flaguk.svg",
-                        ),
-                        SizedBox(height: 14),
-                        FutureBuilder(
-                          future: getTranslateData(
-                            snapshot.data[0].description,
-                          ),
-                          builder: (context, AsyncSnapshot<String> snap) {
-                            if (snap.hasData) {
-                              return Column(
-                                children: <Widget>[
-                                  DisplayResult(
-                                    nameText: "ឈ្មោះ:",
-                                    text: snap.data,
-                                    score: score0,
-                                    nameScore: "កម្រិតប៉ាន់ស្មាន:",
-                                    svgPicture: "assets/images/flagcam.svg",
-                                  ),
-                                  SizedBox(height: 30),
-                                  SpeechContainer(
-                                    textForSpeech: snapshot.data[0].description,
-                                  ),
-                                ],
-                              );
-                            } else if (snap.hasError) {
-                              return DisplayResult(
-                                nameText: "",
-                                text: "បកប្រែមានបញ្ហា",
-                                score: score0,
-                                nameScore: "កម្រិតប៉ាន់ស្មាន:",
-                              );
-                            } else {
-                              return DisplayResult(
-                                nameText: "ឈ្មោះ: ",
-                                text: "",
+      // body: body,
+      body: FutureBuilder<List<LabelAnnotation>>(
+        future: widget.imageUrl == null
+            ? getLabelListFromImage64()
+            : getLabelList(),
+        builder: (context, AsyncSnapshot<List<LabelAnnotation>> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              var score0 = snapshot.data[0].score * 100;
+              return Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    widget.imageUrl == null
+                        ? previewImagePath
+                        : previewContainerUrl,
+                    SizedBox(height: 24),
+                    DisplayResult(
+                      nameText: "Name:",
+                      text: snapshot.data[0].description,
+                      nameScore: "Confident score:",
+                      score: score0,
+                      svgPicture: "assets/images/flaguk.svg",
+                    ),
+                    SizedBox(height: 14),
+                    FutureBuilder(
+                      future: getTranslateData(
+                        snapshot.data[0].description,
+                      ),
+                      builder: (context, AsyncSnapshot<String> snap) {
+                        if (snap.hasData) {
+                          return Column(
+                            children: <Widget>[
+                              DisplayResult(
+                                nameText: "ឈ្មោះ:",
+                                text: snap.data,
                                 score: score0,
                                 nameScore: "កម្រិតប៉ាន់ស្មាន:",
                                 svgPicture: "assets/images/flagcam.svg",
-                              );
-                            }
-                          },
-                        ),
-                        SizedBox(height: 30),
-                        buttonBackToHome,
-                      ],
+                              ),
+                              SizedBox(height: 30),
+                              SpeechContainer(
+                                textForSpeech: snapshot.data[0].description,
+                              ),
+                            ],
+                          );
+                        } else if (snap.hasError) {
+                          return DisplayResult(
+                            nameText: "",
+                            text: "បកប្រែមានបញ្ហា",
+                            score: score0,
+                            nameScore: "កម្រិតប៉ាន់ស្មាន:",
+                          );
+                        } else {
+                          return DisplayResult(
+                            nameText: "ឈ្មោះ: ",
+                            text: "",
+                            score: score0,
+                            nameScore: "កម្រិតប៉ាន់ស្មាន:",
+                            svgPicture: "assets/images/flagcam.svg",
+                          );
+                        }
+                      },
                     ),
-                  ),
-                );
-              } else {
-                return Center(child: Text("No data"));
-              }
-            } else if (snapshot.hasError) {
-              return Column(
-                children: <Widget>[
-                  Center(
-                    child: AlertError(
-                      error: snapshot.error,
-                    ),
-                  ),
-                ],
+                    SizedBox(height: 30),
+                    buttonBackToHome,
+                  ],
+                ),
               );
             } else {
-              return loadingWidget;
+              return Center(child: Text("No data"));
             }
-          },
-        ),
+          } else if (snapshot.hasError) {
+            return Column(
+              children: <Widget>[
+                Center(
+                  child: AlertError(
+                    error: snapshot.error,
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return loadingWidget;
+          }
+        },
       ),
     );
   }

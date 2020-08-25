@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:thingtranslator/providers/menu_index_provider.dart';
 import 'package:thingtranslator/screens/home_screen.dart';
 
 class BaseScreen extends StatefulWidget {
@@ -8,16 +10,15 @@ class BaseScreen extends StatefulWidget {
 }
 
 class _BaseScreenState extends State<BaseScreen> {
-  int selectedIndex = 0;
-
-  void onTap(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    var selectedIndex = Provider.of<MenuIndexProvider>(context);
+
+    void onTap(int index) {
+      Provider.of<MenuIndexProvider>(context, listen: false)
+          .updateSelectedIndex(index);
+    }
+
     final bottomNavBar = BottomNavigationBar(
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -42,7 +43,7 @@ class _BaseScreenState extends State<BaseScreen> {
             ),
             title: Text("Setting")),
       ],
-      currentIndex: selectedIndex,
+      currentIndex: selectedIndex.getSelectedIndex,
       onTap: onTap,
       selectedItemColor: Theme.of(context).primaryColor,
       unselectedItemColor: Colors.grey,
@@ -56,19 +57,7 @@ class _BaseScreenState extends State<BaseScreen> {
 
     return Scaffold(
         backgroundColor: Colors.grey[150],
-        body: menuScreens.elementAt(selectedIndex),
+        body: menuScreens.elementAt(selectedIndex.getSelectedIndex),
         bottomNavigationBar: bottomNavBar);
   }
 }
-//
-// Padding(
-//             padding: EdgeInsets.all(10.0),
-//             child: TextField(
-//               controller: value,
-//               decoration: InputDecoration(
-//                 border: InputBorder.none,
-//                 hintText: 'Please input image URL',
-//                 hintStyle: TextStyle(color: Colors.grey),
-//               ),
-//             ),
-//           ),

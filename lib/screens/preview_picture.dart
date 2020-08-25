@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:thingtranslator/providers/Label_list_provider.dart';
 import 'package:thingtranslator/screens/showModel.dart';
 import 'package:thingtranslator/widgets_recycle/button.dart';
 
@@ -49,25 +51,36 @@ class _PreViewImageState extends State<PreViewImage> {
       title: Text("Preview"),
     );
 
-    final previewContainer = Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.5,
-        decoration: BoxDecoration(
-          image: DecorationImage(fit: BoxFit.contain, image: FileImage(image)),
+    final previewContainer = Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.7,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: FileImage(image),
         ),
       ),
     );
 
-    final previewContainerUrl = Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.5,
-        child: Image.network(imageLink),
+    final previewContainerUrl = Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.7,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Image.network(
+          imageLink,
+          fit: BoxFit.cover,
+        ),
       ),
     );
+    // if (imageBase64 != null)
+    //   Provider.of<LabelListProvider>(context)
+    //       .setLabelListFromImage64(imageBase64);
+    // if (imageLink != null)
+    //   Provider.of<LabelListProvider>(context)
+    //       .setLabelListUsingImageUrl(imageLink);
+    // var imageUrlList = Provider.of<LabelListProvider>(context);
+    // var imageBase64List = Provider.of<LabelListProvider>(context);
 
     final buttonAnalysis = CustomButton(
         title: "Analyze",
@@ -76,8 +89,9 @@ class _PreViewImageState extends State<PreViewImage> {
               ? Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        ShowModel(imageInput: imageBase64, imagePath: image),
+                    builder: (context) => ShowModel(
+                        imageInput: imageBase64,
+                        imagePath: image),
                   ),
                 )
               : Navigator.push(
@@ -90,13 +104,26 @@ class _PreViewImageState extends State<PreViewImage> {
                 );
         });
 
-    final body = Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    // final body = Column(
+    //   mainAxisAlignment: MainAxisAlignment.center,
+    //   crossAxisAlignment: CrossAxisAlignment.center,
+    //   children: <Widget>[
+    //     imageLink == "" ? previewContainer : previewContainerUrl,
+    //     SizedBox(height: 55),
+    //     buttonAnalysis
+    //   ],
+    // );
+
+    final body = Stack(
       children: <Widget>[
         imageLink == "" ? previewContainer : previewContainerUrl,
-        SizedBox(height: 55),
-        buttonAnalysis
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32.0),
+            child: buttonAnalysis,
+          ),
+        ),
       ],
     );
 

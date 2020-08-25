@@ -55,7 +55,7 @@ class _DisplayResultState extends State<DisplayResult> {
                 style: TextStyle(fontSize: 22),
               ),
               Text(
-                "${widget.score.toInt()} %",
+                "${widget.score.toStringAsFixed(2)} %",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ],
