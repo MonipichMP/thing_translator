@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:thingtranslator/screens/camera_screen.dart';
-import 'package:thingtranslator/screens/preview_picture.dart';
-import 'package:thingtranslator/screens/url_screen.dart';
+import 'package:thingtranslator/screens/home_page/camera_screen.dart';
+import 'package:thingtranslator/screens/home_page/preview_picture.dart';
+import 'package:thingtranslator/screens/home_page/url_screen.dart';
 import 'package:thingtranslator/widgets_recycle/menuCard.dart';
 
 class HomeScreen extends StatefulWidget {

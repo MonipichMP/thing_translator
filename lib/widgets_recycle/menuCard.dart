@@ -19,10 +19,6 @@ class MenuCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(13),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          // border: Border.all(
-          //   color: Theme.of(context).accentColor,
-          // ),
           borderRadius: BorderRadius.circular(13),
           boxShadow: [
             BoxShadow(
@@ -34,7 +30,7 @@ class MenuCard extends StatelessWidget {
           ],
         ),
         child: Material(
-          color: Colors.transparent,
+          // color: Colors.grey[200],
           child: InkWell(
             onTap: onTap,
             child: Padding(
@@ -50,9 +46,7 @@ class MenuCard extends StatelessWidget {
                   Spacer(),
                   Text(
                     title,
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
+                    style: TextStyle(fontSize: 15),
                   ),
                 ],
               ),

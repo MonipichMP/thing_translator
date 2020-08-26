@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:thingtranslator/screens/preview_picture.dart';
+import 'package:thingtranslator/screens/home_page/preview_picture.dart';
 import 'package:thingtranslator/widgets_recycle/button.dart';
 
 class UrlScreen extends StatelessWidget {

@@ -52,9 +52,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               groupValue: tapIndex.getSegmentIndex,
               onValueChanged: (value) => onTapChanged(value),
               children: {
-                0: Text(
-                  "File Images"
-                ),
+                0: Text("File Images"),
                 1: Text("Url Images"),
               },
             ),
@@ -72,7 +70,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget appBar() {
     return AppBar(
       title: Text("History"),
-      centerTitle: true,
       automaticallyImplyLeading: false,
     );
   }
@@ -122,45 +119,48 @@ class _HistoryScreenState extends State<HistoryScreen> {
             key: Key(fileList[index].id.toString()),
             child: Column(
               children: <Widget>[
-                SizedBox(
-                  height: 110,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          width: 100.0,
-                          height: 100.0,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: FileImage(File(fileList[index].imageFile)),
+                Material(
+                  child: SizedBox(
+                    height: 110,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            width: 100.0,
+                            height: 100.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image:
+                                    FileImage(File(fileList[index].imageFile)),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 30),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              fileList[index].english,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            Text(
-                              fileList[index].khmer,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            Text(
-                              "${fileList[index].score}%",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ],
+                          SizedBox(width: 30),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                fileList[index].english,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Text(
+                                fileList[index].khmer,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Text(
+                                "${fileList[index].score}%",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -218,45 +218,47 @@ class _HistoryScreenState extends State<HistoryScreen> {
             key: Key(list[index].id.toString()),
             child: Column(
               children: <Widget>[
-                SizedBox(
-                  height: 110,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          width: 100.0,
-                          height: 100.0,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(list[index].imageUrl),
+                Material(
+                  child: SizedBox(
+                    height: 110,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            width: 100.0,
+                            height: 100.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(list[index].imageUrl),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 30),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              list[index].english,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            Text(
-                              list[index].khmer,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            Text(
-                              "${list[index].score}%",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ],
+                          SizedBox(width: 30),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                list[index].english,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Text(
+                                list[index].khmer,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Text(
+                                "${list[index].score}%",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

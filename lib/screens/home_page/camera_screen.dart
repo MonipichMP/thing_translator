@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:thingtranslator/screens/preview_picture.dart';
+import 'package:thingtranslator/screens/home_page/preview_picture.dart';
 
 class CameraScreen extends StatefulWidget {
   final File image;
