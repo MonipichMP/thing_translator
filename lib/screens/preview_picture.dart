@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thingtranslator/providers/Label_list_provider.dart';
-import 'package:thingtranslator/screens/showModel.dart';
+import 'package:thingtranslator/screens/show_model.dart';
 import 'package:thingtranslator/widgets_recycle/button.dart';
 
 class PreViewImage extends StatefulWidget {
@@ -24,20 +24,21 @@ class _PreViewImageState extends State<PreViewImage> {
   String imageLink;
   List<int> imageBytes;
   String imageBase64;
+
   @override
   void initState() {
     super.initState();
-    if (widget.imageFile == null && widget.imageUrl == null) {
+    print(widget.imagePath);
+    print(widget.imageFile);
+    print(widget.imageUrl);
+
+    if (widget.imageUrl == null) {
       image = File(widget.imagePath);
       imageLink = "";
       imageBytes = image.readAsBytesSync();
       imageBase64 = base64Encode(imageBytes);
-    } else if (widget.imagePath == null && widget.imageUrl == null) {
-      image = widget.imageFile;
-      imageLink = "";
-      imageBytes = image.readAsBytesSync();
-      imageBase64 = base64Encode(imageBytes);
-    } else {
+    }
+    else {
       image = File("");
       imageLink = widget.imageUrl;
     }
@@ -73,14 +74,6 @@ class _PreViewImageState extends State<PreViewImage> {
         ),
       ),
     );
-    // if (imageBase64 != null)
-    //   Provider.of<LabelListProvider>(context)
-    //       .setLabelListFromImage64(imageBase64);
-    // if (imageLink != null)
-    //   Provider.of<LabelListProvider>(context)
-    //       .setLabelListUsingImageUrl(imageLink);
-    // var imageUrlList = Provider.of<LabelListProvider>(context);
-    // var imageBase64List = Provider.of<LabelListProvider>(context);
 
     final buttonAnalysis = CustomButton(
         title: "Analyze",
@@ -90,8 +83,10 @@ class _PreViewImageState extends State<PreViewImage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ShowModel(
-                        imageInput: imageBase64,
-                        imagePath: image),
+                      imageInput: imageBase64,
+                      imagePath: image,
+                      path: widget.imagePath,
+                    ),
                   ),
                 )
               : Navigator.push(
@@ -103,16 +98,6 @@ class _PreViewImageState extends State<PreViewImage> {
                   ),
                 );
         });
-
-    // final body = Column(
-    //   mainAxisAlignment: MainAxisAlignment.center,
-    //   crossAxisAlignment: CrossAxisAlignment.center,
-    //   children: <Widget>[
-    //     imageLink == "" ? previewContainer : previewContainerUrl,
-    //     SizedBox(height: 55),
-    //     buttonAnalysis
-    //   ],
-    // );
 
     final body = Stack(
       children: <Widget>[

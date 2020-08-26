@@ -181,7 +181,7 @@ class _CameraScreenState extends State {
 
     try {
       final path = join(
-        (await getTemporaryDirectory()).path,
+        (await getExternalStorageDirectory()).path,
         '${DateTime.now()}.png',
       );
       print(path);

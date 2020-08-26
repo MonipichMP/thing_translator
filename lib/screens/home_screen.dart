@@ -15,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   File _image;
+  String path;
   CameraController _controller;
   Future<void> _initializeControllerFuture;
   bool isCameraReady = false;
@@ -52,12 +53,16 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(
       () {
         _image = imageFile;
+        path = image.path;
       },
     );
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PreViewImage(imageFile: _image),
+        builder: (context) => PreViewImage(
+          imageFile: _image,
+          imagePath: path,
+        ),
       ),
     );
   }

@@ -4,9 +4,8 @@ import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:thingtranslator/apis/label_api.dart';
 import 'package:thingtranslator/apis/translate_api.dart';
+import 'package:thingtranslator/helpers/database_helper.dart';
 import 'package:thingtranslator/models/label_annotation.dart';
-import 'package:thingtranslator/providers/Label_list_provider.dart';
-import 'package:thingtranslator/providers/translation_provider.dart';
 import 'package:thingtranslator/screens/base_screen.dart';
 import 'package:thingtranslator/widgets_recycle/alert_error.dart';
 import 'package:thingtranslator/widgets_recycle/button.dart';
@@ -17,9 +16,15 @@ class ShowModel extends StatefulWidget {
   final String imageInput;
   final File imagePath;
   final String imageUrl;
+  final String path;
 
-  const ShowModel({Key key, this.imageInput, this.imagePath, this.imageUrl})
-      : super(key: key);
+  const ShowModel({
+    Key key,
+    this.imageInput,
+    this.imagePath,
+    this.imageUrl,
+    this.path,
+  }) : super(key: key);
 
   @override
   _ShowModelState createState() => _ShowModelState();
@@ -57,24 +62,9 @@ class _ShowModelState extends State<ShowModel> {
       return translateWord = value.translatedText;
     });
   }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    // Provider.of<LabelListProvider>(context)
-    //     .setLabelListUsingImageUrl(widget.imageUrl);
-    // Provider.of<LabelListProvider>(context)
-    //     .setLabelListFromImage64(widget.imageInput);
-    super.didChangeDependencies();
-  }
-
   @override
   Widget build(BuildContext context) {
-    // var translateWord = Provider.of<TranslationProvider>(context);
+    String khmerWord = "";
 
     final loadingWidget = Container(
       width: MediaQuery.of(context).size.width,
@@ -97,17 +87,6 @@ class _ShowModelState extends State<ShowModel> {
         ),
       ),
     );
-
-    final buttonBackToHome = CustomButton(
-        title: "Back Home Screen",
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BaseScreen(),
-            ),
-          );
-        });
 
     final previewImagePath = Container(
       width: MediaQuery.of(context).size.width - 20,
@@ -132,65 +111,6 @@ class _ShowModelState extends State<ShowModel> {
       ),
     );
 
-    // final body = Padding(
-    //   padding: EdgeInsets.all(8.0),
-    //   child: widget.imageUrl == null
-    //       ? Column(
-    //           mainAxisAlignment: MainAxisAlignment.center,
-    //           crossAxisAlignment: CrossAxisAlignment.center,
-    //           children: <Widget>[
-    //             previewImagePath,
-    //             SizedBox(height: 24),
-    //             DisplayResult(
-    //               nameText: "Name:",
-    //               text: widget.imageInput.description,
-    //               nameScore: "Confident score:",
-    //               score: widget.imageInput.score * 100,
-    //               svgPicture: "assets/images/flaguk.svg",
-    //             ),
-    //             SizedBox(height: 14),
-    //             DisplayResult(
-    //               nameText: "ឈ្មោះ:",
-    //               text: translateWord.getTranslateWord,
-    //               score: widget.imageInput.score * 100,
-    //               nameScore: "កម្រិតប៉ាន់ស្មាន:",
-    //               svgPicture: "assets/images/flagcam.svg",
-    //             ),
-    //             SizedBox(height: 30),
-    //             SpeechContainer(
-    //               textForSpeech: widget.imageInput.description,
-    //             ),
-    //           ],
-    //         )
-    //       : Column(
-    //           mainAxisAlignment: MainAxisAlignment.center,
-    //           crossAxisAlignment: CrossAxisAlignment.center,
-    //           children: <Widget>[
-    //             previewContainerUrl,
-    //             SizedBox(height: 24),
-    //             DisplayResult(
-    //               nameText: "Name:",
-    //               text: widget.imageUrl.description,
-    //               nameScore: "Confident score:",
-    //               score: widget.imageUrl.score * 100,
-    //               svgPicture: "assets/images/flaguk.svg",
-    //             ),
-    //             SizedBox(height: 14),
-    //             DisplayResult(
-    //               nameText: "ឈ្មោះ:",
-    //               text: translateWord.getTranslateWord,
-    //               score: widget.imageUrl.score * 100,
-    //               nameScore: "កម្រិតប៉ាន់ស្មាន:",
-    //               svgPicture: "assets/images/flagcam.svg",
-    //             ),
-    //             SizedBox(height: 30),
-    //             SpeechContainer(
-    //               textForSpeech: widget.imageUrl.description,
-    //             ),
-    //           ],
-    //         ),
-    // );
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -205,6 +125,7 @@ class _ShowModelState extends State<ShowModel> {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               var score0 = snapshot.data[0].score * 100;
+
               return Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Column(
@@ -219,7 +140,7 @@ class _ShowModelState extends State<ShowModel> {
                       nameText: "Name:",
                       text: snapshot.data[0].description,
                       nameScore: "Confident score:",
-                      score: score0,
+                      score: score0.toStringAsFixed(2),
                       svgPicture: "assets/images/flaguk.svg",
                     ),
                     SizedBox(height: 14),
@@ -229,12 +150,13 @@ class _ShowModelState extends State<ShowModel> {
                       ),
                       builder: (context, AsyncSnapshot<String> snap) {
                         if (snap.hasData) {
+                          khmerWord = snap.data;
                           return Column(
                             children: <Widget>[
                               DisplayResult(
                                 nameText: "ឈ្មោះ:",
                                 text: snap.data,
-                                score: score0,
+                                score: score0.toStringAsFixed(2),
                                 nameScore: "កម្រិតប៉ាន់ស្មាន:",
                                 svgPicture: "assets/images/flagcam.svg",
                               ),
@@ -248,14 +170,14 @@ class _ShowModelState extends State<ShowModel> {
                           return DisplayResult(
                             nameText: "",
                             text: "បកប្រែមានបញ្ហា",
-                            score: score0,
+                            score: score0.toStringAsFixed(2),
                             nameScore: "កម្រិតប៉ាន់ស្មាន:",
                           );
                         } else {
                           return DisplayResult(
                             nameText: "ឈ្មោះ: ",
                             text: "",
-                            score: score0,
+                            score: score0.toStringAsFixed(2),
                             nameScore: "កម្រិតប៉ាន់ស្មាន:",
                             svgPicture: "assets/images/flagcam.svg",
                           );
@@ -263,7 +185,29 @@ class _ShowModelState extends State<ShowModel> {
                       },
                     ),
                     SizedBox(height: 30),
-                    buttonBackToHome,
+                    CustomButton(
+                        title: "Analyze Another",
+                        onPressed: () {
+                          widget.imageUrl == null
+                              ? DatabaseHelper.instance.insertIntoHistory(
+                                  widget.path,
+                                  snapshot.data[0].description,
+                                  khmerWord,
+                                  score0.toString(),
+                                )
+                              : DatabaseHelper.instance.insertIntoHistoryUrl(
+                                  widget.imageUrl,
+                                  snapshot.data[0].description,
+                                  khmerWord,
+                                  score0.toString(),
+                                );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BaseScreen(),
+                            ),
+                          );
+                        }),
                   ],
                 ),
               );

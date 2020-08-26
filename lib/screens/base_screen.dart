@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:thingtranslator/providers/menu_index_provider.dart';
+import 'package:thingtranslator/screens/history_screen.dart';
 import 'package:thingtranslator/screens/home_screen.dart';
 
 class BaseScreen extends StatefulWidget {
@@ -51,7 +52,7 @@ class _BaseScreenState extends State<BaseScreen> {
 
     final menuScreens = [
       HomeScreen(),
-      Center(child: Text("History")),
+      HistoryScreen(),
       Center(child: Text("Setting")),
     ];
 

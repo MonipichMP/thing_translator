@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 class DisplayResult extends StatefulWidget {
   final String text;
   final String nameText;
-  final double score;
+  final String score;
   final String nameScore;
   final String svgPicture;
 
@@ -55,7 +55,7 @@ class _DisplayResultState extends State<DisplayResult> {
                 style: TextStyle(fontSize: 22),
               ),
               Text(
-                "${widget.score.toStringAsFixed(2)} %",
+                "${widget.score} %",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ],
