@@ -5,6 +5,7 @@ import 'package:thingtranslator/providers/menu_index_provider.dart';
 import 'package:thingtranslator/screens/history_page/history_screen.dart';
 import 'package:thingtranslator/screens/home_page/home_screen.dart';
 import 'package:thingtranslator/screens/setting_page/setting_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BaseScreen extends StatefulWidget {
   @override
@@ -29,21 +30,21 @@ class _BaseScreenState extends State<BaseScreen> {
               width: 35,
               height: 35,
             ),
-            title: Text("Home")),
+            title: Text("home".tr())),
         BottomNavigationBarItem(
             icon: SvgPicture.asset(
               "assets/images/history.svg",
               width: 35,
               height: 35,
             ),
-            title: Text("History")),
+            title: Text("history".tr())),
         BottomNavigationBarItem(
             icon: SvgPicture.asset(
               "assets/images/setting.svg",
               width: 35,
               height: 35,
             ),
-            title: Text("Setting")),
+            title: Text("setting".tr())),
       ],
       currentIndex: selectedIndex.getSelectedIndex,
       onTap: onTap,

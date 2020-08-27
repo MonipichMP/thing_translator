@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thingtranslator/helpers/app_theme.dart';
@@ -9,10 +10,21 @@ import 'package:thingtranslator/providers/theme_provider.dart';
 import 'package:thingtranslator/providers/translation_provider.dart';
 import 'package:thingtranslator/screens/base_screen.dart';
 
-void main() => runApp(ChangeNotifierProvider(
-      create: (_) => ThemeProvider(ThemeMode.system),
-      child: MyApp(),
-    ));
+void main() => runApp(
+      ChangeNotifierProvider(
+        create: (_) => ThemeProvider(ThemeMode.system),
+        child: EasyLocalization(
+          supportedLocales: [
+            Locale('en', 'US'),
+            Locale('km', 'KH'),
+          ],
+          path: 'assets/translation',
+          fallbackLocale: Locale('en', 'US'),
+          startLocale: Locale('en', 'US'),
+          child: MyApp(),
+        ),
+      ),
+    );
 
 class MyApp extends StatelessWidget {
   @override
@@ -33,6 +45,9 @@ class MyApp extends StatelessWidget {
         theme: AppTheme().lightTheme,
         darkTheme: AppTheme().darkTheme,
         themeMode: themeProvider.getThemeMode(),
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         home: BaseScreen(),
       ),
     );

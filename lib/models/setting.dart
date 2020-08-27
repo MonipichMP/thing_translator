@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 
 class Setting {
   String title;
-  String icon;
+  IconData icon;
   Widget newWidget;
-  bool isTrailing;
+  Widget trailingWidget;
+  bool language;
 
   Setting({
     @required this.title,
-    @required this.icon,
+    this.icon,
     this.newWidget,
-    this.isTrailing,
+    this.trailingWidget,
+    this.language,
   });
 }

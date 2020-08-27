@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:thingtranslator/providers/Label_list_provider.dart';
 import 'package:thingtranslator/screens/home_page/show_model.dart';
 import 'package:thingtranslator/widgets_recycle/button.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class PreViewImage extends StatefulWidget {
   final String imagePath;
@@ -48,7 +49,7 @@ class _PreViewImageState extends State<PreViewImage> {
   Widget build(BuildContext context) {
     final appBar = AppBar(
       automaticallyImplyLeading: false,
-      title: Text("Preview"),
+      title: Text("preview".tr()),
     );
 
     final previewContainer = Container(
@@ -75,7 +76,7 @@ class _PreViewImageState extends State<PreViewImage> {
     );
 
     final buttonAnalysis = CustomButton(
-        title: "Analyze",
+        title: "analyze".tr(),
         onPressed: () {
           imageLink == ""
               ? Navigator.push(

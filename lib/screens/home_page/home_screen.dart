@@ -7,6 +7,7 @@ import 'package:thingtranslator/screens/home_page/camera_screen.dart';
 import 'package:thingtranslator/screens/home_page/preview_picture.dart';
 import 'package:thingtranslator/screens/home_page/url_screen.dart';
 import 'package:thingtranslator/widgets_recycle/menuCard.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -86,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                "Things \nTranslator",
+                "Object \nDetector",
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 34,
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                "Recognize and translate",
+                "detect_recognize_translate".tr(),
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 17,
@@ -109,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                "Things in only few seconds",
+                "object_in_only_few_second".tr(),
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 18,
@@ -126,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisSpacing: 20,
                 children: <Widget>[
                   MenuCard(
-                    title: "Take Picture",
+                    title: "take_picture".tr(),
                     svgPicture: "assets/images/cam.svg",
                     onTap: () {
                       Navigator.push(
@@ -138,14 +139,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                   MenuCard(
-                    title: "Import Picture",
+                    title: "import_picture".tr(),
                     svgPicture: "assets/images/image.svg",
                     onTap: () {
                       getImageForPreview();
                     },
                   ),
                   MenuCard(
-                    title: "Url Picture",
+                    title: "url_picture".tr(),
                     svgPicture: "assets/images/web.svg",
                     onTap: () {
                       Navigator.push(
@@ -157,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                   MenuCard(
-                    title: "Information",
+                    title: "info".tr(),
                     svgPicture: "assets/images/info.svg",
                     onTap: () {},
                   ),

@@ -11,6 +11,7 @@ import 'package:thingtranslator/widgets_recycle/alert_error.dart';
 import 'package:thingtranslator/widgets_recycle/button.dart';
 import 'package:thingtranslator/widgets_recycle/display_result.dart';
 import 'package:thingtranslator/widgets_recycle/speech.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ShowModel extends StatefulWidget {
   final String imageInput;
@@ -82,7 +83,7 @@ class _ShowModelState extends State<ShowModel> {
             SizedBox(
               width: 16,
             ),
-            Text("Calculating...")
+            Text("calculating".tr())
           ],
         ),
       ),
@@ -114,7 +115,7 @@ class _ShowModelState extends State<ShowModel> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Result Analysis'),
+        title: Text('result_analysis'.tr()),
       ),
       // body: body,
       body: FutureBuilder<List<LabelAnnotation>>(
@@ -186,7 +187,7 @@ class _ShowModelState extends State<ShowModel> {
                     ),
                     SizedBox(height: 30),
                     CustomButton(
-                        title: "Analyze Another",
+                        title: "analyze_another".tr(),
                         onPressed: () {
                           widget.imageUrl == null
                               ? DatabaseHelper.instance.insertIntoHistory(
@@ -212,7 +213,7 @@ class _ShowModelState extends State<ShowModel> {
                 ),
               );
             } else {
-              return Center(child: Text("No data"));
+              return Center(child: Text("no_data".tr()));
             }
           } else if (snapshot.hasError) {
             return Column(

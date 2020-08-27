@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AboutAppScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("About App"),
+        title: Text("about_app".tr()),
         automaticallyImplyLeading: false,
       ),
       body: Padding(
@@ -31,14 +32,12 @@ class AboutAppScreen extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              "Version 1.0.0",
+              "version".tr(),
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 15),
             Text(
-              "This app can detect objects around you by spending only few seconds just open"
-              "your camera and take a picture of it then click on 'Analyze' to let it "
-              "detect that object and show you the result with translation to Khmer language also.",
+              "description_at_about_app".tr(),
               style: TextStyle(fontSize: 16),
               maxLines: 10,
             ),

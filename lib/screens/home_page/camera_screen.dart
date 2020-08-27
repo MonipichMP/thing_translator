@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:thingtranslator/screens/home_page/preview_picture.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class CameraScreen extends StatefulWidget {
   final File image;
@@ -100,8 +101,8 @@ class _CameraScreenState extends State {
   /// Display Camera preview.
   Widget _cameraPreviewWidget() {
     if (controller == null || !controller.value.isInitialized) {
-      return const Text(
-        'Loading',
+      return Text(
+        'loading'.tr(),
         style: TextStyle(
           color: Colors.white,
           fontSize: 20.0,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_text_to_speech/flutter_text_to_speech.dart';
 import 'package:thingtranslator/widgets_recycle/button.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SpeechContainer extends StatefulWidget {
   final String textForSpeech;
@@ -38,7 +39,7 @@ class _SpeechContainerState extends State<SpeechContainer> {
   @override
   Widget build(BuildContext context) {
     return CustomButton(
-      title: "Speak",
+      title: "speak".tr(),
       onPressed: _playVoice,
     );
   }

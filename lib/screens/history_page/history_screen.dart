@@ -8,6 +8,7 @@ import 'package:thingtranslator/models/history.dart';
 import 'package:thingtranslator/models/history_url.dart';
 import 'package:thingtranslator/providers/history_provider.dart';
 import 'package:thingtranslator/providers/menu_index_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HistoryScreen extends StatefulWidget {
   @override
@@ -52,8 +53,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
               groupValue: tapIndex.getSegmentIndex,
               onValueChanged: (value) => onTapChanged(value),
               children: {
-                0: Text("File Images"),
-                1: Text("Url Images"),
+                0: Text("file_image".tr()),
+                1: Text("url_image".tr()),
               },
             ),
           ),
@@ -61,7 +62,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           historyList.getFileHistoryList.isNotEmpty ||
                   historyList.getUrlHistoryList.isNotEmpty
               ? bodies[tapIndex.getSegmentIndex]
-              : Center(child: Text("No data"))
+              : Center(child: Text("no_data".tr()))
         ],
       ),
     );
@@ -69,7 +70,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Widget appBar() {
     return AppBar(
-      title: Text("History"),
+      title: Text("history".tr()),
       automaticallyImplyLeading: false,
     );
   }
@@ -89,17 +90,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
               return showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
-                        title: Text("Are you sure to remove this data?"),
+                        title: Text("are_you_sure_to_remove".tr()),
                         actions: <Widget>[
                           FlatButton(
-                            child:
-                                Text('No', style: TextStyle(color: Colors.red)),
+                            child: Text('no'.tr(),
+                                style: TextStyle(color: Colors.red)),
                             onPressed: () {
                               Navigator.of(context).pop(false);
                             },
                           ),
                           FlatButton(
-                            child: Text('Yes'),
+                            child: Text('yes'.tr()),
                             onPressed: () {
                               DatabaseHelper.instance
                                   .deleteHistory(fileList[index].id);
@@ -112,7 +113,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
             onDismissed: (value) {
               Scaffold.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Delete ${fileList[index].english} from list'),
+                  content: RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                      children: <TextSpan>[
+                        TextSpan(text: 'delete'.tr()),
+                        TextSpan(text: " ${fileList[index].english} "),
+                        TextSpan(text: 'from_list'.tr()),
+                      ],
+                    ),
+                  ),
                 ),
               );
             },
@@ -188,17 +198,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
               return showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
-                        title: Text("Are you sure to remove this data?"),
+                        title: Text("are_you_sure_to_remove".tr()),
                         actions: <Widget>[
                           FlatButton(
-                            child:
-                                Text('No', style: TextStyle(color: Colors.red)),
+                            child: Text('no'.tr(),
+                                style: TextStyle(color: Colors.red)),
                             onPressed: () {
                               Navigator.of(context).pop(false);
                             },
                           ),
                           FlatButton(
-                            child: Text('Yes'),
+                            child: Text('yes'.tr()),
                             onPressed: () {
                               DatabaseHelper.instance
                                   .deleteHistoryUrl(list[index].id);
@@ -211,7 +221,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
             onDismissed: (value) {
               Scaffold.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Delete ${list[index].english} from list'),
+                  content: RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                      children: <TextSpan>[
+                        TextSpan(text: 'delete'.tr()),
+                        TextSpan(text: " ${list[index].english} "),
+                        TextSpan(text: 'from_list'.tr()),
+                      ],
+                    ),
+                  ),
+                  // Text('Delete ${list[index].english} from list'),
                 ),
               );
             },
